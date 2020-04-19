@@ -126,6 +126,17 @@ class weatherApp {
         return($output);
     }
 
+    public function getUserInput() {
+        return '
+        <form method="post" action="">
+            <label for="location">Location: </label>
+            <input type="text" id="location" name="location">
+            <input type="submit" value="Submit">
+            <button type="submit" name="default" id="default" value="default">Use Sample Locations</button>
+        </form>
+        ';
+    }
+
 }
 
 
@@ -153,15 +164,27 @@ print("<p>Get Highest Temp</p>");
 </div>
 
 <?
+
 $w = new weatherApp;
 
-print('<p>Values submitted:</p>');
+if( $_POST['location'] ) {
+    $w->setTempsFromLocations($_POST['location']);
+    echo '<a href="">Try Again</a>';
+} else if ( $_POST['default'] ) {
+    $w->setTempsFromLocations($w->sample_location);
+    echo '<a href="">Try Again</a>';
+} else {
+    echo $w->getUserInput();
+}
+
+
+print('<p>Sample Locations:</p>');
 print('<pre>' . $w->sample_location . '</pre>');
 
 
 print('<p>Returned Values:</p><pre>');
 
-$w->setTempsFromLocations($w->sample_location);
+// $w->setTempsFromLocations($w->sample_location);
 $temp_arr = $w->getTempsFromLocations();
 
 // print which values are zipcode, lat-lon, or city name
